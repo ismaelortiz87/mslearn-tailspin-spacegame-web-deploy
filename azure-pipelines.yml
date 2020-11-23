@@ -65,11 +65,11 @@ stages:
       - publish: '$(Build.ArtifactStagingDirectory)'
         artifact: drop
   
-  - stage: 'Deploy'
-    displayName: 'Deploy the web application'
+  - stage: 'Create WebApp'
+    displayName: 'Create Webapp On ASP'
     dependsOn: Build
     jobs:
-    - deployment: Deploy
+    - deployment: CreateApp
       pool:
         vmImage: 'ubuntu-18.04'
       environment: dev
@@ -100,3 +100,29 @@ stages:
                     az group create -n "$RG" --location eastus &
                     az webapp create -g "$RG" -p $ASPID -n $NAME --runtime "DOTNETCORE|3.1" &
                     fi'
+
+  - stage: 'Deploy'
+    displayName: 'Deploy the web application'
+    dependsOn: Build
+    jobs:
+    - deployment: CreateApp
+      pool:
+        vmImage: 'ubuntu-18.04'
+      environment: dev
+      variables:
+      - group: Release
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - download: current
+              artifact: drop
+              condition:
+
+            - task: AzureWebApp@1
+              displayName: 'Azure App Service Deploy: website'
+              inputs:
+                        azureSubscription: 'Resource Manager - Tailspin - Space Game'
+                        appName: '$(WebAppName)'
+                        package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+          
