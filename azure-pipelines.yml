@@ -87,19 +87,14 @@ stages:
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                ASP="devopslab_linux" \
-                ASPRG="DevOpsPractices-rg" \
-                NAME="mytest5637-app" \
-                RG="myetest5637-rg" \
-                ASPID="/subscriptions/ad7245e9-fcaa-4b37-a5c3-8ae951cc4bbc/resourceGroups/DevOpsPractices-rg/providers/Microsoft.Web/serverfarms/devopslab_linux" \ &
-                if az group show -n "$RG" -o none; then
+                if az group show -n "myetest5637-rg" -o none; then
                 echo "RG is Already created"
                 else 
                 echo "Creating" &
-                az group create -n "$RG" --location eastus &
-                az webapp create -g "$RG" -p $ASPID -n $NAME --runtime "DOTNETCORE|3.1" &
+                az group create -n "myetest5637-rg" --location eastus &
+                az webapp create -g "myetest5637-rg" -p /subscriptions/ad7245e9-fcaa-4b37-a5c3-8ae951cc4bbc/resourceGroups/DevOpsPractices-rg/providers/Microsoft.Web/serverfarms/devopslab_linux -n mytest5637-app --runtime "DOTNETCORE|3.1" &
                 fi
-              workingDirectory: '/usr/bin/'
+              useGlobalConfig: true
           - task: AzureWebApp@1
             displayName: 'Azure App Service Deploy: website'
             inputs:
