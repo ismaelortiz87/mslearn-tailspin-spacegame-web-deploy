@@ -81,6 +81,27 @@ stages:
           steps:
           - download: current
             artifact: drop
+          - task: AzureCLI@2
+            inputs:
+              azureSubscription: 'Maelo''s Subscription - No tocar (ad7245e9-fcaa-4b37-a5c3-8ae951cc4bbc)'
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: |
+                ASP="devopslab_linux" \
+                ASPRG="DevOpsPractices-rg" \
+                NAME="mytest5637-app" \
+                RG="myetest5637-rg" \
+                ASPID="/subscriptions/ad7245e9-fcaa-4b37-a5c3-8ae951cc4bbc/resourceGroups/DevOpsPractices-rg/providers/Microsoft.Web/serverfarms/devopslab_linux" \ &
+                
+                # run script
+                
+                if az group show -n "$RG" -o none; then
+                echo "RG is Already created"
+                else 
+                echo "Creating" &
+                az group create -n "$RG" --location eastus &
+                az webapp create -g "$RG" -p $ASPID -n $NAME --runtime "DOTNETCORE|3.1" &
+                fi
           - task: AzureWebApp@1
             displayName: 'Azure App Service Deploy: website'
             inputs:
