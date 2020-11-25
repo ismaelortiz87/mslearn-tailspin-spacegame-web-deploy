@@ -7,7 +7,7 @@ variables:
 stages:
 - stage: 'Deploy'
   displayName: 'Deploy the web application'
-  dependsOn: Build
+ 
   jobs:
   - deployment: Deploy
     pool:
