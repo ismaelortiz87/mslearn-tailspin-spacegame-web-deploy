@@ -19,8 +19,7 @@ stages:
       runOnce:
         deploy:
           steps:
-          - download: current
-            artifact: drop
+         
           - task: AzureCLI@2
             inputs:
               azureSubscription: 'Maelo''s Subscription - No tocar (ad7245e9-fcaa-4b37-a5c3-8ae951cc4bbc)'
@@ -41,9 +40,4 @@ stages:
                 az webapp create -g "$appname" -p /subscriptions/ad7245e9-fcaa-4b37-a5c3-8ae951cc4bbc/resourceGroups/DevOpsPractices-rg/providers/Microsoft.Web/serverfarms/devopslab_linux -n mytest5637-app --runtime "DOTNETCORE|3.1" &
                 fi
               useGlobalConfig: true
-          - task: AzureWebApp@1
-            displayName: 'Azure App Service Deploy: website'
-            inputs:
-              azureSubscription: 'Resource Manager - Tailspin - Space Game'
-              appName: '$(WebAppName)'
-              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+   
