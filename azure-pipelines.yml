@@ -2,7 +2,6 @@ trigger:
 - '*'
 
 variables:
-  group: 'appcfg'
   buildConfiguration: 'Release'  
 stages:
 - stage: 'Deploy'
@@ -15,19 +14,21 @@ stages:
     environment: dev
     variables:
     - group: Release
+    - group: 'appcfg'
     strategy:
       runOnce:
         deploy:
           steps:
-         
+       
           - task: AzureCLI@2
+          
             inputs:
               azureSubscription: 'Maelo''s Subscription - No tocar (ad7245e9-fcaa-4b37-a5c3-8ae951cc4bbc)'
               scriptType: 'bash'
               scriptLocation: 'inlineScript'
               inlineScript: |
-                appname="$(pjname)"
-                rgname="$(pjname)"
+                appname=" "$(pjname)" "
+                rgname=" "$(pjname)" "
                 echo "$appname"
                 echo "$rgname"
                 az login --service-principal --username 9062c44e-7db5-414c-9bfc-4126c88cacd2 --password pjAshf8HWYXFfx.kC.dWWJIb0PWn8CB0IS --tenant 9acf6dd6-1978-4d9c-9a9c-c9be95245565 & 
